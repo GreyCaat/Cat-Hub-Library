@@ -1,7 +1,7 @@
 local library = {}
 
 function library:CreateMain(guititle, credits)
-	wait(0.5)
+	wait(1)
 	local GCLib = Instance.new("ScreenGui")
 	local TopMain = Instance.new("ImageLabel")
 	local Container = Instance.new("ImageLabel")

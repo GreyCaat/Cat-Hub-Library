@@ -20,9 +20,11 @@ function library:CreateMain(guititle, credits)
 	local InfoTitle_2 = Instance.new("TextLabel")
 	local InfoTextC = Instance.new("TextLabel")
 	local InfoTextT = Instance.new("TextLabel")
+	local TextButton = Instance.new("TextButton")
 	local DropShadow = Instance.new("ImageLabel")
 	local TextLabel = Instance.new("TextLabel")
 	getgenv().runnin = false
+	getgenv().Key = "K"
 
 	GCLib.Name = "Cat-Lib"
 	GCLib.Parent = game:WaitForChild("CoreGui")
@@ -151,7 +153,7 @@ function library:CreateMain(guititle, credits)
 	Cover_2.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 	Cover_2.BackgroundTransparency = 1.000
 	Cover_2.Position = UDim2.new(0.158956274, 0, 0.213000014, 0)
-	Cover_2.Size = UDim2.new(0, 569, 0, 285)
+	Cover_2.Size = UDim2.new(0, 569, 0, 286)
 	Cover_2.ZIndex = 69
 	Cover_2.Image = "rbxassetid://3570695787"
 	Cover_2.ImageColor3 = Color3.fromRGB(20, 20, 20)
@@ -237,13 +239,25 @@ function library:CreateMain(guititle, credits)
 	InfoTextT.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	InfoTextT.BackgroundTransparency = 1.000
 	InfoTextT.BorderSizePixel = 0
-	InfoTextT.Position = UDim2.new(0.00800000038, 0, 0.870000005, 0)
-	InfoTextT.Size = UDim2.new(0, 364, 0, 21)
+	InfoTextT.Position = UDim2.new(0.0374331549, 0, 0.870000005, 0)
+	InfoTextT.Size = UDim2.new(0, 109, 0, 21)
 	InfoTextT.Font = Enum.Font.TitilliumWeb
-	InfoTextT.Text = "Toggle the GUI with \"k\"."
+	InfoTextT.Text = "Toggle GUI key:"
 	InfoTextT.TextColor3 = Color3.fromRGB(80, 80, 80)
 	InfoTextT.TextSize = 25.000
 	InfoTextT.TextWrapped = true
+
+	TextButton.Parent = InfoTextT
+	TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	TextButton.BackgroundTransparency = 1.000
+	TextButton.BorderSizePixel = 0
+	TextButton.Position = UDim2.new(1.025, 0, 0, 0)
+	TextButton.Size = UDim2.new(0, 248, 0, 21)
+	TextButton.Font = Enum.Font.TitilliumWeb
+	TextButton.Text = "K"
+	TextButton.TextColor3 = Color3.fromRGB(80, 80, 80)
+	TextButton.TextSize = 25.000
+	TextButton.TextXAlignment = Enum.TextXAlignment.Left
 
 	local function DKQOL_fake_script()
 		local script = Instance.new('LocalScript', Cover_2)
@@ -278,7 +292,32 @@ function library:CreateMain(guititle, credits)
 		runnin = false
 	end
 	coroutine.wrap(DKQOL_fake_script)()
-	local function ATUM_fake_script() -- TopMain.LocalScript 
+	local function YZEPHRU_fake_script() -- TextButton.LocalScript 
+		local script = Instance.new('LocalScript', TextButton)
+	
+		local settingkeybind = true
+		local mouse = game.Players.LocalPlayer:GetMouse()
+		
+		script.Parent.MouseButton1Down:Connect(function()
+			settingkeybind = false
+			script.Parent.Text = "..."
+			runnin = true
+		end)
+		
+		game:GetService("UserInputService").InputBegan:connect(function(inputObject, gameProcessedEvent)
+			if inputObject.UserInputType == Enum.UserInputType.Keyboard then
+				if settingkeybind == false then
+					settingkeybind = true
+					script.Parent.Text = inputObject.KeyCode.Name
+					Key = inputObject.KeyCode.Name
+					runnin = false
+				end
+			end
+		end)
+		
+	end
+	coroutine.wrap(YZEPHRU_fake_script)()
+	local function ATPW_fake_script() -- TopMain.LocalScript 
 		local script = Instance.new('LocalScript', TopMain)
 	
 		local Cover = script.Parent.Parent.Cover
@@ -286,8 +325,8 @@ function library:CreateMain(guititle, credits)
 		local shadow = script.Parent.Parent.Cover.DropShadow
 		local time = 0.2 
 		
-		game.Players.LocalPlayer:GetMouse().KeyDown:Connect(function(KeyPressed)
-			if KeyPressed == "k" then
+		game:GetService("UserInputService").InputBegan:connect(function(inputObject, gameProcessedEvent)
+			if inputObject.KeyCode.Name == Key then
 				if not runnin then
 					runnin = true
 					if TopMain.Visible == true then
@@ -320,7 +359,7 @@ function library:CreateMain(guititle, credits)
 			end
 		end)
 	end
-	coroutine.wrap(ATUM_fake_script)()
+	coroutine.wrap(ATPW_fake_script)()
 	local function ABFOOO_fake_script() -- TopMain.LocalScript 
 		local script = Instance.new('LocalScript', TopMain)
 	

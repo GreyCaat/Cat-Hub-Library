@@ -25,11 +25,15 @@ function library:CreateMain(guititle, credits)
 	local TextLabel = Instance.new("TextLabel")
 	getgenv().runnin = false
 
-	if isfile("Cat-Lib.txt") == false then
-		writefile("Cat-Lib.txt", "")
+	if syn then
+		if isfile("Cat-Lib.txt") == false then
+			writefile("Cat-Lib.txt", "")
+			_G.CatLibKey = "K"
+		elseif isfile("Cat-Lib.txt") == true then
+			loadfile("Cat-Lib.txt")()
+		end
+	else
 		_G.CatLibKey = "K"
-	elseif isfile("Cat-Lib.txt") == true then
-		loadfile("Cat-Lib.txt")()
 	end
 
 	GCLib.Name = "Cat-Lib"
@@ -315,8 +319,10 @@ function library:CreateMain(guititle, credits)
 				if settingkeybind == false then
 					settingkeybind = true
 					script.Parent.Text = inputObject.KeyCode.Name
-					_G.CatLibKey =inputObject.KeyCode.Name
-					writefile("Cat-Lib.txt", [[_G.CatLibKey = ]].. [["]].._G.CatLibKey..[["]])
+					_G.CatLibKey = inputObject.KeyCode.Name
+					if syn then
+						writefile("Cat-Lib.txt", [[_G.CatLibKey = ]].. [["]].._G.CatLibKey..[["]])
+					end
 					runnin = false
 				end
 			end

@@ -24,7 +24,13 @@ function library:CreateMain(guititle, credits)
 	local DropShadow = Instance.new("ImageLabel")
 	local TextLabel = Instance.new("TextLabel")
 	getgenv().runnin = false
-	getgenv().Key = "K"
+
+	if isfile("Cat-Lib.txt") == false then
+		writefile("Cat-Lib.txt", "")
+		_G.CatLibKey = "K"
+	elseif isfile("Cat-Lib.txt") == true then
+		loadfile("Cat-Lib.txt")()
+	end
 
 	GCLib.Name = "Cat-Lib"
 	GCLib.Parent = game:WaitForChild("CoreGui")
@@ -254,7 +260,7 @@ function library:CreateMain(guititle, credits)
 	TextButton.Position = UDim2.new(1.025, 0, 0, 0)
 	TextButton.Size = UDim2.new(0, 248, 0, 21)
 	TextButton.Font = Enum.Font.TitilliumWeb
-	TextButton.Text = "K"
+	TextButton.Text = _G.CatLibKey
 	TextButton.TextColor3 = Color3.fromRGB(80, 80, 80)
 	TextButton.TextSize = 25.000
 	TextButton.TextXAlignment = Enum.TextXAlignment.Left
@@ -309,7 +315,8 @@ function library:CreateMain(guititle, credits)
 				if settingkeybind == false then
 					settingkeybind = true
 					script.Parent.Text = inputObject.KeyCode.Name
-					Key = inputObject.KeyCode.Name
+					_G.CatLibKey =inputObject.KeyCode.Name
+					writefile("Cat-Lib.txt", [[_G.CatLibKey = ]].. [["]].._G.CatLibKey..[["]])
 					runnin = false
 				end
 			end
@@ -326,7 +333,7 @@ function library:CreateMain(guititle, credits)
 		local time = 0.2 
 		
 		game:GetService("UserInputService").InputBegan:connect(function(inputObject, gameProcessedEvent)
-			if inputObject.KeyCode.Name == Key then
+			if inputObject.KeyCode.Name == _G.CatLibKey then
 				if not runnin then
 					runnin = true
 					if TopMain.Visible == true then

@@ -1,6 +1,6 @@
 local library = {}
 
-function library:CreateMain(guititle, credits)
+function library:CreateMain(guititle, greyorblue)
 	wait(1)
 	local GCLib = Instance.new("ScreenGui")
 	local TopMain = Instance.new("ImageLabel")
@@ -24,16 +24,16 @@ function library:CreateMain(guititle, credits)
 	local DropShadow = Instance.new("ImageLabel")
 	local TextLabel = Instance.new("TextLabel")
 	getgenv().runnin = false
+	_G.CatLibKey = "K"
 
 	if syn then
+		check = true
 		if isfile("Cat-Lib.txt") == false then
 			writefile("Cat-Lib.txt", "")
 			_G.CatLibKey = "K"
 		elseif isfile("Cat-Lib.txt") == true then
 			loadfile("Cat-Lib.txt")()
 		end
-	else
-		_G.CatLibKey = "K"
 	end
 
 	GCLib.Name = "Cat-Lib"
@@ -224,12 +224,23 @@ function library:CreateMain(guititle, credits)
 	InfoTitle_2.TextSize = 25.000
 	InfoTitle_2.TextWrapped = true
 
-	local credit = ""
-	if credits then
-        credit = ', scripts made by: "'.. credits.. '" !'
-    else
-        credit = " !"
-    end
+	-----------------------------------
+
+	local credittext = "you forgor credits 💀"
+	local GrOBl = ""
+
+	if greyorblue then
+		GrOBl = string.lower(greyorblue)
+	end
+
+	if GrOBl == "grey" then
+		credittext = "This part/script of Cat-Hub was made by: Grey Cat#4774"
+	elseif GrOBl == "blue" then
+		credittext = "This part/script of Cat-Hub was made by: Blue Cat#4746"
+	end
+
+	-----------------------------------
+
 	InfoTextC.Name = "InfoTextC"
 	InfoTextC.Parent = Info_2
 	InfoTextC.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -238,7 +249,7 @@ function library:CreateMain(guititle, credits)
 	InfoTextC.Position = UDim2.new(0, 24, 0.256999999, 0)
 	InfoTextC.Size = UDim2.new(0, 329, 0, 103)
 	InfoTextC.Font = Enum.Font.TitilliumWeb
-    InfoTextC.Text = "UI Library made by: \"Grey Cat#4774\"".. credit
+    InfoTextC.Text = credittext
 	InfoTextC.TextColor3 = Color3.fromRGB(211, 211, 211)
 	InfoTextC.TextSize = 25.000
 	InfoTextC.TextWrapped = true
@@ -594,9 +605,12 @@ function library:CreateMain(guititle, credits)
 		end
 		coroutine.wrap(UXFF_fake_script)()
 
+
 		local ButtonLib = {}
 
-		function ButtonLib:CreateLine()
+		function ButtonLib:CreateLine(instance)
+			local instance = instance or function() end
+
 			local Line = Instance.new("Frame")
 			local ActualLine = Instance.new("Frame")
 			local UICorner_15 = Instance.new("UICorner")
@@ -622,9 +636,13 @@ function library:CreateMain(guititle, credits)
 			
 			UICorner_15.CornerRadius = UDim.new(0, 12)
 			UICorner_15.Parent = ActualLine
+
+			pcall(instance, Line)
 		end
 
-		function ButtonLib:CreateLabel(name)
+		function ButtonLib:CreateLabel(name, instance)
+			local instance = instance or function() end
+
 			local name = name or "forgor text 💀"
 
 			local LabelTemplate = Instance.new("TextLabel")
@@ -652,6 +670,8 @@ function library:CreateMain(guititle, credits)
 			
 			UICorner_14.CornerRadius = UDim.new(0, 9)
 			UICorner_14.Parent = LabelTemplate	
+
+			pcall(instance, LabelTemplate)
 		end
 
 		function ButtonLib:CreateButton(name, callback)
@@ -680,7 +700,7 @@ function library:CreateMain(guititle, credits)
 			GlobalLayoutOrder = GlobalLayoutOrder + 2
 
 			ButtonTemplate.MouseButton1Down:Connect(function()
-				pcall(callback)
+				pcall(callback, ButtonTemplate)
 			end)
 			
 			UICorner_12.CornerRadius = UDim.new(0, 12)
@@ -837,7 +857,7 @@ function library:CreateMain(guititle, credits)
 
 			local function Fire()
                 enabled = not enabled
-                pcall(callback, enabled)
+                pcall(callback, enabled, ButtonTemplateToggle)
             end
 
             ButtonTemplateToggle.MouseButton1Down:Connect(Fire)
@@ -1216,7 +1236,7 @@ function library:CreateMain(guititle, credits)
 				coroutine.wrap(OMIC_fake_script)()
 
 				DropdownButton.MouseButton1Down:Connect(function() 
-					pcall(callback)
+					pcall(callback, DropdownButton)
 				end)
 			end
 			return DropLib

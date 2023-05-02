@@ -1,18 +1,35 @@
+local TweenService = game:GetService("TweenService")
 local Notifications = Instance.new("ScreenGui")
 
 Notifications.Name = "Notifications"
-Notifications.Parent = game:WaitForChild("CoreGui")
+Notifications.Parent = game:GetService("CoreGui")
 Notifications:SetAttribute("Active", false)
 
 -- -- -- --
 
 local notifLibrary = {}
 
-function notifLibrary:SendNotification(title, desc, type)
+function notifLibrary:SendNotification(title, desc, type, id)
+    Notifications:SetAttribute(id, nil)
+
     if Notifications:GetAttribute("Active") then
-        Notifications:FindFirstChild("Notification"):Destroy()
+        if not Notifications.Notification:GetAttribute("Deleting") then
+            local oldID = Notifications.Notification:GetAttribute("ID")
+            Notifications:SetAttribute(oldID, "None")
+
+            Notifications.Notification:SetAttribute("Deleting", true)
+
+            local delTween = TweenService:Create(Notifications.Notification, TweenInfo.new(0.5, Enum.EasingStyle.Cubic), {Position = UDim2.new(1.1, 0, 0.931, 0)})
+            delTween:Play()
+            delTween.Completed:Wait()
+
+            Notifications.Notification:Destroy()
+        end
+
         Notifications:SetAttribute("Active", false)
     end
+
+    repeat task.wait() until not Notifications:GetAttribute("Active")
 
     Notifications:SetAttribute("Active", true)
 
@@ -31,12 +48,15 @@ function notifLibrary:SendNotification(title, desc, type)
     Notification.AnchorPoint = Vector2.new(0.5, 0.5)
     Notification.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     Notification.BorderSizePixel = 0
-    Notification.Position = UDim2.new(0.913491905, 0, 0.894551933, 0)
-    Notification.Size = UDim2.new(0.140144229, 0, 0.144585326, 0)
+    Notification.Position = UDim2.new(0.945, 0, 1.1, 0)
+    TweenService:Create(Notification, TweenInfo.new(0.25, Enum.EasingStyle.Cubic), {Position = UDim2.new(0.945, 0, 0.931, 0)}):Play()
+    Notification.Size = UDim2.new(0.1, 0, 0.103, 0)
     --Config
     Notification:SetAttribute("Title", title)
     Notification:SetAttribute("Desc", desc)
     Notification:SetAttribute("Type", type) --timed-normal | confirmation
+    Notification:SetAttribute("ID", id)
+    Notifications:SetAttribute("Deleting", false)
     --
 
     Title.Name = "Title"
@@ -110,18 +130,19 @@ function notifLibrary:SendNotification(title, desc, type)
     UICorner_3.Parent = Notification
 
     UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(211, 211, 211)), ColorSequenceKeypoint.new(0.06, Color3.fromRGB(252, 252, 252)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 255, 255))}
-    UIGradient.Offset = Vector2.new(-0.0500000007, 0)
+    UIGradient.Offset = Vector2.new(0.05, 0)
+    UIGradient.Rotation = 180
     UIGradient.Parent = Notification
 
     coroutine.wrap(function()
         local script = Instance.new('LocalScript', Notification)
-
-        local TweenService = game:GetService("TweenService")
         
         for _, v in pairs(script.Parent.Title:GetChildren()) do
             if v:IsA("TextButton") then
                 v.MouseButton1Down:Connect(function()
                     local time = 0.2
+
+                    Notifications:SetAttribute(id, v.Name)
         
                     local cornerTween = TweenService:Create(v.UICorner, TweenInfo.new(time), {CornerRadius = UDim.new(0.2, 0)})
                     cornerTween:Play()
@@ -130,12 +151,21 @@ function notifLibrary:SendNotification(title, desc, type)
                     tween:Play()
         
                     tween.Completed:Wait()
+
+                    if not script.Parent:GetAttribute("Deleting") then
+                        script.Parent:SetAttribute("Deleting", true)
+                        local delTween = TweenService:Create(script.Parent, TweenInfo.new(0.5, Enum.EasingStyle.Cubic), {Position = UDim2.new(1.1, 0, 0.931, 0)})
+                        delTween:Play()
+                        delTween.Completed:Wait()
+                    end
         
                     local cornerTween2 = TweenService:Create(v.UICorner, TweenInfo.new(time), {CornerRadius = UDim.new(0.3, 0)})
                     cornerTween2:Play()
         
                     local tween2 = TweenService:Create(v, TweenInfo.new(time), {BackgroundColor3 = Color3.fromRGB(55, 55, 55)})
                     tween2:Play()
+
+                    script.Parent:Destroy()
                 end)
             end
         end
@@ -152,10 +182,10 @@ function notifLibrary:SendNotification(title, desc, type)
         if table.find(types, Notiftype) then
             if Notiftype == types[1] then
                 script.Parent.Title.Yes.Size = UDim2.new(1.011, 0, 1.011, 0)
+                script.Parent.Title.Yes.Position = UDim2.new(0.489, 0, 3.05, 0)
                 script.Parent.Title.Yes.Text = "Ok"
                 script.Parent.Title.No.Visible = false
             elseif Notiftype == types[2] then
-                script.Parent.UIGradient.Enabled = true
                 script.Parent.Title.No.Visible = false
                 script.Parent.Title.Yes.Visible = false
                 script.Parent.Title.Desc.Size = UDim2.new(0.997, 0, 2.637, 0)
@@ -163,16 +193,21 @@ function notifLibrary:SendNotification(title, desc, type)
                 --
                 
                 local time = 5
-                local TweenService = game:GetService("TweenService")
                 
-                local Tween = TweenService:Create(script.Parent.UIGradient, TweenInfo.new(time, Enum.EasingStyle.Quad), {Offset = Vector2.new(1, 0)})
+                local Tween = TweenService:Create(script.Parent.UIGradient, TweenInfo.new(time, Enum.EasingStyle.Linear), {Offset = Vector2.new(-1, 0)})
                 Tween:Play()
                 Tween.Completed:Wait()
                 
                 --
-                script.Parent:Destroy()
+                if not script.Parent:GetAttribute("Deleting") then
+                    script.Parent:SetAttribute("Deleting", true)
+                    local delTween = TweenService:Create(script.Parent, TweenInfo.new(0.5, Enum.EasingStyle.Cubic), {Position = UDim2.new(1.1, 0, 0.931, 0)})
+                    delTween:Play()
+                    delTween.Completed:Wait()
+                    script.Parent:Destroy()
+                end
             else
-                --Standart layout, also this is retarted but works
+                --Standart layout, also this whole system is retarted but works so ¯\_(ツ)_/¯
             end
         else
             print("Notification has no type")

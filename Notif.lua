@@ -19,7 +19,7 @@ function notifLibrary:SendNotification(title, desc, type, id)
 
             Notifications.Notification:SetAttribute("Deleting", true)
 
-            local delTween = TweenService:Create(Notifications.Notification, TweenInfo.new(0.5, Enum.EasingStyle.Cubic), {Position = UDim2.new(1.1, 0, 0.931, 0)})
+            local delTween = TweenService:Create(Notifications.Notification, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {Position = UDim2.new(1.1, 0, 0.931, 0)})
             delTween:Play()
             delTween.Completed:Wait()
 
@@ -42,6 +42,12 @@ function notifLibrary:SendNotification(title, desc, type, id)
     local UICorner_2 = Instance.new("UICorner")
     local UICorner_3 = Instance.new("UICorner")
     local UIGradient = Instance.new("UIGradient")
+    local UIStroke = Instance.new("UIStroke")
+    local UIStroke_2 = Instance.new("UIStroke")
+    local UIStroke_3 = Instance.new("UIStroke")
+    local UIStroke_4 = Instance.new("UIStroke")
+    local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+    local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
 
     Notification.Name = "Notification"
     Notification.Parent = Notifications
@@ -85,7 +91,7 @@ function notifLibrary:SendNotification(title, desc, type, id)
     Desc.Size = UDim2.new(0.997043014, 0, 1.54884577, 0)
     Desc.Font = Enum.Font.TitilliumWeb
     Desc.Text = "Try again?"
-    Desc.TextColor3 = Color3.fromRGB(230, 230, 230)
+    Desc.TextColor3 = Color3.fromRGB(215, 215, 215)
     Desc.TextScaled = true
     Desc.TextSize = 14.000
     Desc.TextWrapped = true
@@ -98,9 +104,9 @@ function notifLibrary:SendNotification(title, desc, type, id)
     Yes.Position = UDim2.new(0.223410383, 0, 3.04999852, 0)
     Yes.Size = UDim2.new(0.480804026, 0, 1.01066852, 0)
     Yes.AutoButtonColor = false
-    Yes.Font = Enum.Font.Unknown
+    Yes.Font = Enum.Font.TitilliumWeb
     Yes.Text = "Yes"
-    Yes.TextColor3 = Color3.fromRGB(210, 225, 210)
+    Yes.TextColor3 = Color3.fromRGB(200, 215, 200)
     Yes.TextScaled = true
     Yes.TextSize = 14.000
     Yes.TextWrapped = true
@@ -116,9 +122,9 @@ function notifLibrary:SendNotification(title, desc, type, id)
     No.Position = UDim2.new(0.752563059, 0, 3.04999852, 0)
     No.Size = UDim2.new(0.480804026, 0, 1.01066852, 0)
     No.AutoButtonColor = false
-    No.Font = Enum.Font.Unknown
+    No.Font = Enum.Font.TitilliumWeb
     No.Text = "No"
-    No.TextColor3 = Color3.fromRGB(225, 210, 210)
+    No.TextColor3 = Color3.fromRGB(215, 200, 200)
     No.TextScaled = true
     No.TextSize = 14.000
     No.TextWrapped = true
@@ -133,6 +139,27 @@ function notifLibrary:SendNotification(title, desc, type, id)
     UIGradient.Offset = Vector2.new(0.05, 0)
     UIGradient.Rotation = 180
     UIGradient.Parent = Notification
+
+    UIStroke.Color = Color3.fromRGB(140, 140, 140)
+    UIStroke.Parent = Notification
+
+    UIStroke_2.Color = Title.TextColor3
+    UIStroke_2.Thickness = 0.3
+    UIStroke_2.Parent = Title
+
+    UIStroke_3.Color = No.TextColor3
+    UIStroke_3.Thickness = 0.2
+    UIStroke_3.Parent = No
+
+    UIStroke_4.Color = Yes.TextColor3
+    UIStroke_4.Thickness = 0.2
+    UIStroke_4.Parent = Yes
+
+    UITextSizeConstraint.Parent = Yes
+    UITextSizeConstraint.MaxTextSize = 28
+
+    UITextSizeConstraint_2.Parent = No
+    UITextSizeConstraint_2.MaxTextSize = 28
 
     coroutine.wrap(function()
         local script = Instance.new('LocalScript', Notification)
@@ -154,7 +181,7 @@ function notifLibrary:SendNotification(title, desc, type, id)
 
                     if not script.Parent:GetAttribute("Deleting") then
                         script.Parent:SetAttribute("Deleting", true)
-                        local delTween = TweenService:Create(script.Parent, TweenInfo.new(0.5, Enum.EasingStyle.Cubic), {Position = UDim2.new(1.1, 0, 0.931, 0)})
+                        local delTween = TweenService:Create(script.Parent, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {Position = UDim2.new(1.1, 0, 0.931, 0)})
                         delTween:Play()
                     end
         
@@ -203,7 +230,7 @@ function notifLibrary:SendNotification(title, desc, type, id)
                 --
                 if not script.Parent:GetAttribute("Deleting") then
                     script.Parent:SetAttribute("Deleting", true)
-                    local delTween = TweenService:Create(script.Parent, TweenInfo.new(0.5, Enum.EasingStyle.Cubic), {Position = UDim2.new(1.1, 0, 0.931, 0)})
+                    local delTween = TweenService:Create(script.Parent, TweenInfo.new(0.5, Enum.EasingStyle.Quart), {Position = UDim2.new(1.1, 0, 0.931, 0)})
                     delTween:Play()
                     delTween.Completed:Wait()
                     script.Parent:Destroy()

@@ -156,7 +156,6 @@ function notifLibrary:SendNotification(title, desc, type, id)
                         script.Parent:SetAttribute("Deleting", true)
                         local delTween = TweenService:Create(script.Parent, TweenInfo.new(0.5, Enum.EasingStyle.Cubic), {Position = UDim2.new(1.1, 0, 0.931, 0)})
                         delTween:Play()
-                        delTween.Completed:Wait()
                     end
         
                     local cornerTween2 = TweenService:Create(v.UICorner, TweenInfo.new(time), {CornerRadius = UDim.new(0.3, 0)})
@@ -165,7 +164,10 @@ function notifLibrary:SendNotification(title, desc, type, id)
                     local tween2 = TweenService:Create(v, TweenInfo.new(time), {BackgroundColor3 = Color3.fromRGB(55, 55, 55)})
                     tween2:Play()
 
+                    task.wait(0.3)
+
                     script.Parent:Destroy()
+                    Notifications:SetAttribute("Active", false)
                 end)
             end
         end
@@ -205,6 +207,7 @@ function notifLibrary:SendNotification(title, desc, type, id)
                     delTween:Play()
                     delTween.Completed:Wait()
                     script.Parent:Destroy()
+                    Notifications:SetAttribute("Active", false)
                 end
             else
                 --Standart layout, also this whole system is retarted but works so ¯\_(ツ)_/¯

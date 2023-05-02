@@ -48,7 +48,7 @@ function notifLibrary:SendNotification(title, desc, type)
     Title.Position = UDim2.new(0.509000003, 0, 0.150000006, 0)
     Title.Size = UDim2.new(0.910599887, 0, 0.253909826, 0)
     Title.Font = Enum.Font.TitilliumWeb
-    Title.FontFace.Weight = "Bold"
+    Title.FontFace.Weight = Enum.FontWeight.Bold
     Title.Text = "Location Change Failed"
     Title.TextColor3 = Color3.fromRGB(240, 240, 240)
     Title.TextScaled = true
